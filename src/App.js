@@ -1,11 +1,12 @@
 import GlobalStyle from "./GlobalStyle";
 import styled from "styled-components";
 import Header from "@components/templates/Header";
-import Events from "@components/templates/Events";
-const TopBanner = styled.div`
+import TopBanner from "@components/templates/TopBanner";
+
+const Events = styled.div`
   width: 100%;
-  height: 400px;
-  background-color: green;
+  height: 398px;
+  background-color: pink;
 `;
 
 const ItemsOnSale = styled.div`
