@@ -2,12 +2,7 @@ import GlobalStyle from "./GlobalStyle";
 import styled from "styled-components";
 import Header from "@components/templates/Header";
 import TopBanner from "@components/templates/TopBanner";
-
-const Events = styled.div`
-  width: 100%;
-  height: 398px;
-  background-color: pink;
-`;
+import Events from "@components/templates/Events";
 
 const ItemsOnSale = styled.div`
   width: 100%;

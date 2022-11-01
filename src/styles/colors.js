@@ -9,6 +9,7 @@ export const textGreen = "#22c55e";
 export const textRed = "#ef4444";
 
 //bg색상
+
 export const bgPrimary = "rgb(24, 24, 27)";
 export const bgSecondary = "#27272a";
 export const bgBlack = "black";

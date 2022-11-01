@@ -1,7 +1,7 @@
 import { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
 import * as colors from "@styles/colors";
-
+import MarkProHeavy from "@assets/fonts/MarkPro-Heavy.woff2";
 const GlobalStyle = createGlobalStyle`
   ${reset}
 
@@ -10,7 +10,7 @@ const GlobalStyle = createGlobalStyle`
     color: ${colors.textPrimary};
     font-weight: 400;
   }
-
+  
   body {
     background-color: ${colors.bgPrimary};
   }
@@ -18,7 +18,14 @@ const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
   }
+  
 
+  @font-face {
+    font-family: 'MarkPro-Heavy';
+    src: url(${MarkProHeavy}) format('woff2');
+    font-weight: 800;
+    font-style: normal;
+  }
   
 `;
 
