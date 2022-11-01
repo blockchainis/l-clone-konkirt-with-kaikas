@@ -3,12 +3,7 @@ import styled from "styled-components";
 import Header from "@components/templates/Header";
 import TopBanner from "@components/templates/TopBanner";
 import Events from "@components/templates/Events";
-
-const ItemsOnSale = styled.div`
-  width: 100%;
-  height: 394px;
-  background-color: blue;
-`;
+import ItemsOnSale from "@components/templates/ItemsOnSale";
 
 const OpenseaTopCollections = styled.div`
   width: 100%;

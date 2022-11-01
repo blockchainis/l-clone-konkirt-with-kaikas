@@ -24,7 +24,7 @@ const TopLeftTriangle = styled.div`
   left: -1px;
 `;
 
-const TopRightTriangle = styled.div`
+const BottomRightTriangle = styled.div`
   width: 0px;
   height: 0px;
   border-bottom: 60px solid ${colors.bgPrimary};
@@ -56,7 +56,7 @@ function TopBanner() {
     <Container>
       <BannerWrapper>
         <TopLeftTriangle />
-        <TopRightTriangle />
+        <BottomRightTriangle />
         <BannerOrderBox> 1 / 2 </BannerOrderBox>
       </BannerWrapper>
     </Container>
