@@ -72,8 +72,8 @@ function ItemsOnSale() {
     <SectionLayout>
       <SectionTop title="지금 판매중인 아이템" showAll="아이템 전체보기" />
       <HideScrollX>
-        {[1, 1, 1, 1, 1, 1].map((num) => (
-          <CardWrapper>
+        {[1, 2, 3, 4, 5, 6].map((num) => (
+          <CardWrapper key={num}>
             <CardImage src="https://konkrit-prod-itemmedia-t837t51tz51i.s3.ap-northeast-2.amazonaws.com/0x1fec856e25f757fed06eb90548b0224e91095738/0x1fec856e25f757fed06eb90548b0224e91095738-6741.png"></CardImage>
             <InfoBox>
               <CollectionTitle>{collectionTitle}</CollectionTitle>
