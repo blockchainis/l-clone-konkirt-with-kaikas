@@ -6,6 +6,7 @@ module.exports = override(
     "@components": path.resolve(__dirname, "src", "components"),
     "@assets": path.resolve(__dirname, "src", "assets"),
     "@styles": path.resolve(__dirname, "src", "styles"),
+    "@hooks": path.resolve(__dirname, "src", "hooks"),
   }),
   ...addBabelPlugins(["babel-plugin-styled-components"])
 );
