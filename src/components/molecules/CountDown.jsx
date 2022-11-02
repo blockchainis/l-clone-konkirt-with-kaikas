@@ -29,9 +29,9 @@ function formatCount(count) {
     return `${count}`;
   }
 }
-export default function CountDown() {
+export default function CountDown({ targetDate }) {
   const { days, hours, minutes, seconds, isClosed, isComingSoon } =
-    useCountDown(new Date(2022, 11, 29));
+    useCountDown(targetDate);
   if (isComingSoon) {
     return (
       <EachCountWrapper>
