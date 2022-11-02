@@ -1,18 +1,12 @@
 import GlobalStyle from "./GlobalStyle";
-import styled from "styled-components";
 import Header from "@components/templates/Header";
 import TopBanner from "@components/templates/TopBanner";
 import Events from "@components/templates/Events";
 import ItemsOnSale from "@components/templates/ItemsOnSale";
 import OpenseaTopCollections from "@components/templates/OpenseaTopCollections";
 import OnBoarding from "@components/templates/OnBoarding";
+import Footer from "@components/templates/Footer";
 
-const Footer = styled.footer`
-  height: 240px;
-  width: 100%;
-  background-color: floralwhite;
-  margin-top: 100px;
-`;
 
 function App() {
   return (
