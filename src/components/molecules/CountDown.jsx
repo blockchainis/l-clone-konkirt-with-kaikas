@@ -22,27 +22,49 @@ const UnitText = styled.div`
   line-height: 27px;
   align-self: flex-end;
 `;
-
+function formatCount(count) {
+  if (count < 10) {
+    return `0${count}`;
+  } else {
+    return `${count}`;
+  }
+}
 export default function CountDown() {
   const { days, hours, minutes, seconds, isClosed, isComingSoon } =
     useCountDown(new Date(2022, 11, 29));
+  if (isComingSoon) {
+    return (
+      <EachCountWrapper>
+        <CountText>Coming Soon!</CountText>
+      </EachCountWrapper>
+    );
+  }
+
+  if (isClosed) {
+    return (
+      <EachCountWrapper>
+        <CountText>End!</CountText>
+      </EachCountWrapper>
+    );
+  }
+
   return (
     <CountDownWrapper>
       <EachCountWrapper>
-        <CountText>{days}</CountText>
+        <CountText>{formatCount(days)}</CountText>
         <UnitText>일</UnitText>
       </EachCountWrapper>
       <EachCountWrapper>
-        <CountText>{hours}</CountText>
-        <UnitText>일</UnitText>
+        <CountText>{formatCount(hours)}</CountText>
+        <UnitText>시</UnitText>
       </EachCountWrapper>
       <EachCountWrapper>
-        <CountText>{minutes}</CountText>
-        <UnitText>일</UnitText>
+        <CountText>{formatCount(minutes)}</CountText>
+        <UnitText>분</UnitText>
       </EachCountWrapper>
       <EachCountWrapper>
-        <CountText>{seconds}</CountText>
-        <UnitText>일</UnitText>
+        <CountText>{formatCount(seconds)}</CountText>
+        <UnitText>초</UnitText>
       </EachCountWrapper>
     </CountDownWrapper>
   );

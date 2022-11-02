@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 function useCountDown(targetDate) {
   const countDownDate = targetDate;
   const [countDown, setCountDown] = useState(() => {
-    return countDownDate - new Date();
+    return Math.max(countDownDate - new Date(), 0);
   });
   const isClosed = countDown <= 0;
   const isComingSoon = isNaN(countDown);
