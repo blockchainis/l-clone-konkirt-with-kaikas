@@ -2,7 +2,7 @@ import styled, { keyframes } from "styled-components";
 import * as colors from "@styles/colors";
 import SectionLayout from "@components/molecules/SectionLayout";
 import HideScrollX from "@components/molecules/HideScrollX";
-import EventCard from "@components/organisms/EventCard";
+import EventCard from "@components/molecules/EventCard";
 
 const EventsTopWrapper = styled.div`
   display: flex;
