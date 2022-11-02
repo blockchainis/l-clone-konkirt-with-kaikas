@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import useCountDown from "@components/hooks/useCountDown";
 
 const CountDownWrapper = styled.div`
   display: flex;
@@ -23,22 +24,24 @@ const UnitText = styled.div`
 `;
 
 export default function CountDown() {
+  const { days, hours, minutes, seconds, isClosed, isComingSoon } =
+    useCountDown(new Date(2022, 11, 29));
   return (
     <CountDownWrapper>
       <EachCountWrapper>
-        <CountText>08</CountText>
+        <CountText>{days}</CountText>
         <UnitText>일</UnitText>
       </EachCountWrapper>
       <EachCountWrapper>
-        <CountText>08</CountText>
+        <CountText>{hours}</CountText>
         <UnitText>일</UnitText>
       </EachCountWrapper>
       <EachCountWrapper>
-        <CountText>08</CountText>
+        <CountText>{minutes}</CountText>
         <UnitText>일</UnitText>
       </EachCountWrapper>
       <EachCountWrapper>
-        <CountText>08</CountText>
+        <CountText>{seconds}</CountText>
         <UnitText>일</UnitText>
       </EachCountWrapper>
     </CountDownWrapper>
