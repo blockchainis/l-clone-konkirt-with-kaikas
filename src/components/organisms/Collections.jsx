@@ -3,9 +3,18 @@ import styled from "styled-components";
 
 import useData from "@hooks/useData";
 import Collection from "@components/molecules/Collection";
+import LoadingSpinner from "@components/atoms/LoadingSpinner";
 
 const CollectionList = styled.ul`
   margin-top: 16px;
+`;
+
+const LoadingWrapper = styled.div`
+  width: 100%;
+  height: 1604px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default function Collections() {
@@ -15,7 +24,11 @@ export default function Collections() {
   );
 
   if (isLoading) {
-    return <div>로딩</div>;
+    return (
+      <LoadingWrapper>
+        <LoadingSpinner />
+      </LoadingWrapper>
+    );
   }
 
   if (isError) {
