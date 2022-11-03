@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import useCountDown from "@components/hooks/useCountDown";
+import useCountDown from "@hooks/useCountDown";
 
 const CountDownWrapper = styled.div`
   display: flex;
