@@ -2,8 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import * as colors from "@styles/colors";
 import Ether from "@components/atoms/Ether";
-import { useState, useEffect } from "react";
-import axios from "axios";
+import useData from "@hooks/useData";
 
 const CollectionList = styled.ul`
   margin-top: 16px;
@@ -74,27 +73,11 @@ const PriceText = styled.span`
 `;
 
 export default function Collections() {
-  const [collections, setCollections] = useState({ openseaCollections: [] });
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const { data, isLoading, isError } = useData(
+    { openseaCollections: [] },
+    "http://localhost:3000/api/opensea-top-collections"
+  );
 
-  useEffect(() => {
-    async function fetchCollections() {
-      setIsLoading(true);
-      setIsError(false);
-      try {
-        const results = await axios(
-          "http://localhost:3000/api/opensea-top-collections"
-        );
-        setCollections(results.data);
-        setIsLoading(false);
-      } catch {
-        setIsError(true);
-        setIsLoading(false);
-      }
-    }
-    fetchCollections();
-  }, []);
   if (isLoading) {
     return <div>로딩</div>;
   }
@@ -105,7 +88,7 @@ export default function Collections() {
 
   return (
     <CollectionList>
-      {collections.openseaCollections.map((collection, index) => (
+      {data.openseaCollections.map((collection, index) => (
         <CollectionItem key={collection.id}>
           <CollectionInfo>
             <RankText>{index + 1}</RankText>
