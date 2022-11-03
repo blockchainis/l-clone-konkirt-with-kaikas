@@ -57,7 +57,7 @@ const PriceWrapper = styled.div`
 `;
 
 const NumberText = styled(NormalText)`
-  color: ${colors.textGreen};
+  color: ${(props) => props.color};
 `;
 
 const PriceText = styled.span`
@@ -66,7 +66,24 @@ const PriceText = styled.span`
   margin-left: 4px;
 `;
 
-export default function Collection({collection, rank}) {
+function getColor(number) {
+  if (number > 0) {
+    return colors.textGreen;
+  }
+
+  if (number === 0) {
+    return colors.textSecondary;
+  }
+
+  return colors.textRed;
+}
+
+export default function Collection({ collection, rank }) {
+  const oneDayVolumeChange = collection.oneDayVolumeChange;
+
+  const isPositiveVolumeChange = oneDayVolumeChange > 0;
+  const numberColor = getColor(oneDayVolumeChange);
+
   return (
     <CollectionItem>
       <CollectionInfo>
@@ -87,7 +104,10 @@ export default function Collection({collection, rank}) {
           <Ether />
           <PriceText>{collection.oneDayVolume}</PriceText>
         </PriceWrapper>
-        <NumberText>+{collection.oneDayVolumeChange}%</NumberText>
+        <NumberText color={numberColor}>
+          {isPositiveVolumeChange ? "+" : ""}
+          {collection.oneDayVolumeChange}%
+        </NumberText>
       </CollectionPriceInfo>
     </CollectionItem>
   );
