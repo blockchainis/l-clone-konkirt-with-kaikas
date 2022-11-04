@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import useCountDown from "@hooks/useCountDown";
 
 const CountDownWrapper = styled.div`
   display: flex;
@@ -22,24 +23,34 @@ const UnitText = styled.div`
   align-self: flex-end;
 `;
 
+function formatCount(count) {
+  if (count < 10 && count > 0) {
+    return `0${count}`;
+  }
+  return `${count}`;
+}
+
 export default function CountDown() {
+  //month같은 경우에는 index이기때문에 11월 => 10으로 작성해주셔야 합니다.
+  const { days, hours, minutes, seconds } = useCountDown(new Date(2022, 10, 5));
+
   return (
     <CountDownWrapper>
       <EachCountWrapper>
-        <CountText>08</CountText>
+        <CountText>{formatCount(days)}</CountText>
         <UnitText>일</UnitText>
       </EachCountWrapper>
       <EachCountWrapper>
-        <CountText>08</CountText>
-        <UnitText>일</UnitText>
+        <CountText>{formatCount(hours)}</CountText>
+        <UnitText>시</UnitText>
       </EachCountWrapper>
       <EachCountWrapper>
-        <CountText>08</CountText>
-        <UnitText>일</UnitText>
+        <CountText>{formatCount(minutes)}</CountText>
+        <UnitText>분</UnitText>
       </EachCountWrapper>
       <EachCountWrapper>
-        <CountText>08</CountText>
-        <UnitText>일</UnitText>
+        <CountText>{formatCount(seconds)}</CountText>
+        <UnitText>초</UnitText>
       </EachCountWrapper>
     </CountDownWrapper>
   );
