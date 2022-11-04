@@ -30,9 +30,9 @@ function formatCount(count) {
   return `${count}`;
 }
 
-export default function CountDown() {
+export default function CountDown({targetDate}) {
   //month같은 경우에는 index이기때문에 11월 => 10으로 작성해주셔야 합니다.
-  const { days, hours, minutes, seconds } = useCountDown(new Date(2022, 10, 5));
+  const { days, hours, minutes, seconds } = useCountDown(targetDate);
 
   return (
     <CountDownWrapper>
