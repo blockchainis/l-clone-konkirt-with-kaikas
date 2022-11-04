@@ -35,7 +35,36 @@ function App() {
       localStorage.setItem("_user", account);
     }
   }, [setUser]);
-  
+
+  useEffect(() => {
+    if (!klaytn) {
+      return;
+    }
+
+    const handleChangeAccounts = () => {
+      if (!user) {
+        return;
+      }
+
+      const changedAccount = klaytn?.selectedAddress;
+
+      if (user !== changedAccount) {
+        toast.success(
+          `${changedAccount.slice(0, 5)}..계정이 바뀌셨군요 ㅎㅎ!!`
+        );
+        setUser(changedAccount);
+        localStorage.setItem("_user", changedAccount);
+      }
+    };
+
+    klaytn?.on("accountsChanged", handleChangeAccounts);
+    return () => {
+      klaytn.off("accountsChanged", handleChangeAccounts);
+    };
+  }, [user, setUser]);
+
+
+
   return (
     <>
       <GlobalStyle />
