@@ -63,6 +63,21 @@ const KaikasImage = styled.img`
 
 const klaytn = window.klaytn;
 
+async function isKaikasAvailable() {
+  const klaytn = window?.klaytn;
+  if (!klaytn) {
+    return false;
+  }
+
+  const results = await Promise.all([
+    klaytn._kaikas.isApproved(),
+    klaytn._kaikas.isEnabled(),
+    klaytn._kaikas.isUnlocked(),
+  ]);
+
+  return results.every((res) => res);
+}
+
 function Header() {
   const { user, setUser } = useAuth();
   async function loginWithKaikas() {
@@ -92,8 +107,15 @@ function Header() {
     loginWithKaikas();
   }
 
-  function handleDone() {
-    toast.success("엇 ..또 로그인 하실려구요?!");
+  async function handleDone() {
+    const isAvailable = await isKaikasAvailable();
+    if (isAvailable) {
+      toast.success("엇 ..또 로그인 하실려구요?!");
+      return;
+    }
+
+    toast.warn("다시 로그인 해주세요 ^^!");
+    setUser("");
   }
 
   return (
