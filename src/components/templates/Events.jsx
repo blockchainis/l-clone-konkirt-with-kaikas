@@ -50,7 +50,7 @@ const eventData = [
     imgUrl: eventImageOne,
     title: "메디소사이어티 NFT 프로젝트",
     subtitle: "Medistock",
-    targetDate: new Date(2022, 11, 30),
+    targetDate: new Date(2022, 10, 11),
   },
   {
     id: 2,
