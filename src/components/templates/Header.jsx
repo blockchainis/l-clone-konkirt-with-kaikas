@@ -5,8 +5,12 @@ import HamburgerIcon from "@components/atoms/HamburgerIcon";
 import * as colors from "@styles/colors";
 import Wallet from "@components/atoms/Wallet";
 import kaikasImageUrl from "@assets/image/kaikas.png";
+import walletImageUrl from "@assets/image/wallet.svg";
 import { toast } from "react-toastify";
 import useAuth from "@hooks/useAuth";
+import Caver from "caver-js";
+
+const caver = new Caver(window.klaytn);
 
 const Container = styled.header`
   width: 100%;
@@ -78,6 +82,17 @@ async function isKaikasAvailable() {
   return results.every((res) => res);
 }
 
+async function signWithKaikas() {
+  const caver = new Caver(klaytn);
+
+  try {
+    const signObj = await caver.klay.sign(
+      "message",
+      window.klaytn.selectedAddress
+    );
+  } catch (e) {}
+}
+
 function Header() {
   const { user, setUser } = useAuth();
   async function loginWithKaikas() {
@@ -97,7 +112,7 @@ function Header() {
         { closeButton: true }
       );
       setUser(accounts[0]);
-      localStorage.setItem("_user", accounts[0])
+      localStorage.setItem("_user", accounts[0]);
       toast.success(`${accounts[0].slice(0, 13)}...님 환영합니다~ ^^`);
     } catch {
       toast.error("로그인 실패..! 다시 시도해주세요~^^");
@@ -105,7 +120,7 @@ function Header() {
   }
 
   function handleLogin() {
-    loginWithKaikas();
+    // loginWithKaikas();
   }
 
   async function handleDone() {
@@ -117,7 +132,7 @@ function Header() {
 
     toast.warn("다시 로그인 해주세요 ^^!");
     setUser("");
-    localStorage.removeItem("_user")
+    localStorage.removeItem("_user");
   }
 
   return (
@@ -130,8 +145,11 @@ function Header() {
           <SearchIcon />
         </SearchIconWrapper>
       </SearchBarWrapper>
-      <WalletBox onClick={user ? handleDone : handleLogin}>
-        {user ? <KaikasImage src={kaikasImageUrl} /> : <Wallet />}
+      {/* <WalletBox onClick={user ? handleDone : handleLogin}>
+        {user ? <KaikasImage src={walletImageUrl} /> : <Wallet />}
+      </WalletBox> */}
+      <WalletBox onClick={signWithKaikas}>
+        <KaikasImage src={walletImageUrl} />
       </WalletBox>
       <GrayRoundBox>
         <HamburgerIcon />
