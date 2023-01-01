@@ -11,10 +11,11 @@ import { useEffect } from "react";
 import useAuth from "@hooks/useAuth";
 import { toast } from "react-toastify";
 
-const klaytn = window.klaytn;
+const { klaytn, ethereum } = window;
 
 function App() {
   const { user, setUser } = useAuth();
+
   useEffect(() => {
     //kaikas 지갑 없을시 이 effect무효!
     if (!klaytn) {
@@ -22,72 +23,113 @@ function App() {
     }
 
     const account = localStorage.getItem("_user");
-    const currentKaikasAccount = klaytn?.selectedAddress;
+    const wallet = localStorage.getItem("_wallet");
 
-    if (!account || !currentKaikasAccount) {
+    let currentAccount = "";
+
+    if (wallet === "kaikas") {
+      currentAccount = klaytn?.selectedAddress;
+    } else if (wallet === "metamask") {
+      currentAccount = ethereum?.selectedAddress;
+    }
+
+    if (!account || !currentAccount) {
       setUser("");
       localStorage.removeItem("_user");
+      localStorage.removeItem("_wallet");
       return;
     }
 
-    if (account === currentKaikasAccount) {
-      setUser(account);
+    if (account === currentAccount) {
+      setUser({ account: account, wallet: wallet });
       localStorage.setItem("_user", account);
+      localStorage.setItem("_wallet", wallet);
     }
   }, [setUser]);
 
   useEffect(() => {
-    if (!klaytn) {
-      return;
-    }
-
     const handleChangeAccounts = () => {
       if (!user) {
         return;
       }
 
-      const changedAccount = klaytn?.selectedAddress;
+      let changedAccount = "";
 
-      if (user !== changedAccount) {
+      if (user.wallet === "kaikas") {
+        if (!klaytn) {
+          return;
+        }
+        changedAccount = klaytn?.selectedAddress;
+      } else if (user.wallet === "metamask") {
+        if (!ethereum) {
+          return;
+        }
+        changedAccount = ethereum?.selectedAddress;
+      }
+
+      if (user.account !== changedAccount) {
         toast.success(
-          `${changedAccount.slice(0, 5)}..계정이 바뀌셨군요 ㅎㅎ!!`
+          `${changedAccount.slice(0, 5)} 계정정보가 변경되어 로그아웃 합니다.`
         );
-        setUser(changedAccount);
-        localStorage.setItem("_user", changedAccount);
+
+        // Sign, NFT 로그인의 경우 계정이 바뀌면 정보를 초기화한다.
+        setUser("");
+        localStorage.removeItem("_user");
+        localStorage.removeItem("_wallet");
+        // setUser(changedAccount);
+        // localStorage.setItem("_user", changedAccount);
       }
     };
 
-    klaytn?.on("accountsChanged", handleChangeAccounts);
-    return () => {
-      klaytn.off("accountsChanged", handleChangeAccounts);
-    };
+    if (user.wallet === "kaikas") {
+      klaytn?.on("accountsChanged", handleChangeAccounts);
+      return () => {
+        klaytn.removeListener("accountsChanged", handleChangeAccounts);
+      };
+    } else if (user.wallet === "metamask") {
+      ethereum?.on("accountsChanged", handleChangeAccounts);
+      return () => {
+        ethereum.removeListener("accountsChanged", handleChangeAccounts);
+      };
+    }
   }, [user, setUser]);
 
   useEffect(() => {
-    if (!klaytn) {
-      return;
-    }
-
-    const networkObj = {
-      1001: "바오밥 테스트넷",
-      8217: "메인넷",
-    };
+    // const networkObj = {
+    //   1: "이더리움 메인넷",
+    //   5: "Goerli 테스트넷",
+    //   1001: "바오밥 테스트넷",
+    //   8217: "메인넷",
+    // };
 
     const handleNetworkChanged = () => {
-      setUser("");
-      localStorage.removeItem("_user");
-      toast.warn(
-        `네트워크가 ${
-          networkObj[klaytn.networkVersion]
-        }으로 바뀌었군요! 다시 로그인 해주세요~`
-      );
+      let network;
+      if (user.wallet === "kaikas") {
+        network = klaytn.networkVersion;
+      } else if (user.wallet === "metamask") {
+        network = ethereum.networkVersion;
+      }
+      // setUser("");
+      // localStorage.removeItem("_user");
+      if (network !== 8217) {
+        toast.warn(
+          `네트워크를 클레이튼 메인넷 (8217) 으로 변경해주세요. ( 현재 네트워크 : ${network} )`
+        );
+      }
     };
 
-    klaytn?.on("networkChanged", handleNetworkChanged);
-    return () => {
-      klaytn?.removeListener("networkChanged", handleNetworkChanged);
-    };
-  }, [setUser]);
+    if (user.wallet === "kaikas") {
+      klaytn?.on("networkChanged", handleNetworkChanged);
+      return () => {
+        klaytn?.removeListener("networkChanged", handleNetworkChanged);
+      };
+    } else if (user.wallet === "metamask") {
+      ethereum?.on("networkChanged", handleNetworkChanged);
+      return () => {
+        ethereum?.removeListener("networkChanged", handleNetworkChanged);
+      };
+    }
+  }, [user, setUser]);
 
   return (
     <>
