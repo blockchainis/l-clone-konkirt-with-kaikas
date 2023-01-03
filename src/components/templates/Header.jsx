@@ -313,26 +313,26 @@ function Header() {
     _walletType,
     _onlyBalance
   ) {
-    const headers = {
-      "Content-Type": "application/json",
-      "x-api-key": "12ad0db3-89e7-4589-9c79-3582b3042b88",
+    const header = {
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": "12ad0db3-89e7-4589-9c79-3582b3042b88",
+      },
+    };
+
+    const url = "https://api.fast-dive.com/v1/nft/verifyHolder";
+
+    const params = {
+      sign: _signObj,
+      signMessage: _message,
+      contractAddress: _contractAddress,
+      chainId: _chainId,
+      walletType: _walletType,
+      onlyBalance: _onlyBalance,
     };
 
     await axios
-      .post(
-        "https://api.fast-dive.com/v1/nft/verifyHolder",
-        {
-          sign: _signObj,
-          signMessage: _message,
-          contractAddress: _contractAddress,
-          chainId: _chainId,
-          walletType: _walletType,
-          onlyBalance: _onlyBalance,
-        },
-        {
-          headers: headers,
-        }
-      )
+      .post(url, params, header)
       .then(function (response) {
         const data = response.data.data;
         setIsOpenLoadingModal(false);
