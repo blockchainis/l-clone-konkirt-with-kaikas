@@ -117,6 +117,7 @@ function Header() {
         },
         { closeButton: true }
       );
+      toast.success("Connect Success [" + AccountSummary(accounts[0]) + "]");
       setIsOpenLoadingModal(false);
       setIsOpenModal(true);
 
@@ -212,6 +213,7 @@ function Header() {
       const accounts = await ethereum.request({
         method: "eth_requestAccounts",
       });
+      toast.success("Connect Success [" + AccountSummary(accounts[0]) + "]");
       setIsOpenLoadingModal(false);
       setIsOpenModal(true);
       return true;
@@ -310,6 +312,16 @@ function Header() {
   }
 
   /**
+   * 계정주소 summary
+   * @param {string} account
+   * @returns
+   */
+  const AccountSummary = (account) => {
+    const accountSummary = account.slice(0, 4) + "..." + account.slice(38, 42);
+    return accountSummary;
+  };
+
+  /**
    * fastdive API 호출 - verifyHolder
    *
    * @param {*} _signObj
@@ -360,9 +372,7 @@ function Header() {
         }
         // 조건만족시 로그인 처리
         if (data.balance > 0) {
-          toast.success(`로그인 완료 (balance : ${data.balance})`, {
-            position: toast.POSITION.TOP_CENTER,
-          });
+          toast.success(`로그인 완료 (balance : ${data.balance})`);
           setUser({ account: _ownerAddress, wallet: _walletType });
           localStorage.setItem("_user", _ownerAddress);
           localStorage.setItem("_wallet", _walletType);
