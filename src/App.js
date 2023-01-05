@@ -24,6 +24,7 @@ function App() {
 
     const account = localStorage.getItem("_user");
     const wallet = localStorage.getItem("_wallet");
+    const imageUrl = localStorage.getItem("_imageUrl");
 
     let currentAccount = "";
 
@@ -37,13 +38,15 @@ function App() {
       setUser("");
       localStorage.removeItem("_user");
       localStorage.removeItem("_wallet");
+      localStorage.removeItem("_imageUrl");
       return;
     }
 
     if (account === currentAccount) {
-      setUser({ account: account, wallet: wallet });
+      setUser({ account: account, wallet: wallet, imageUrl: imageUrl });
       localStorage.setItem("_user", account);
       localStorage.setItem("_wallet", wallet);
+      localStorage.setItem("_imageUrl", imageUrl);
     }
   }, [setUser]);
 
@@ -76,8 +79,7 @@ function App() {
         setUser("");
         localStorage.removeItem("_user");
         localStorage.removeItem("_wallet");
-        // setUser(changedAccount);
-        // localStorage.setItem("_user", changedAccount);
+        localStorage.removeItem("_imageUrl");
       }
     };
 
@@ -109,8 +111,6 @@ function App() {
       } else if (user.wallet === "metamask") {
         network = ethereum.networkVersion;
       }
-      // setUser("");
-      // localStorage.removeItem("_user");
       if (network !== 8217) {
         toast.warn(
           `네트워크를 클레이튼 메인넷 (8217) 으로 변경해주세요. ( 현재 네트워크 : ${network} )`

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import * as colors from "@styles/colors";
 import useAuth from "@hooks/useAuth";
@@ -10,6 +10,7 @@ import HamburgerIcon from "@components/atoms/HamburgerIcon";
 // molecules
 import WalletModal from "@components/molecules/WalletModal";
 import WalletBox from "@components/molecules/WalletBox";
+import ProfileModal from "@components/molecules/ProfileModal";
 // imageUrls
 import metamaskImageUrl from "@assets/image/metamask.png";
 import kaikasImageUrl from "@assets/image/kaikas.png";
@@ -67,8 +68,19 @@ function Header() {
   const { user, setUser } = useAuth();
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isOpenLoadingModal, setIsOpenLoadingModal] = useState(false);
+  const [isOpenProfileModal, setIsOpenProfileModal] = useState(false);
   const [loadingTitle, setLoadingTitle] = useState("");
   const { klaytn, ethereum } = window;
+
+  /**
+   * 프로필 모달 조회시 스크롤 고정 해제
+   */
+  useEffect(() => {
+    if (isOpenProfileModal) {
+      document.querySelector("body").style.overflow = "auto";
+      document.querySelector("body").style.paddingRight = "";
+    }
+  }, [isOpenProfileModal]);
 
   /**
    * 0. 카이카스 로그인 버튼
@@ -105,8 +117,6 @@ function Header() {
         },
         { closeButton: true }
       );
-
-      // toast.success(`${accounts[0].slice(0, 13)} -> Connect 완료`);
       setIsOpenLoadingModal(false);
       setIsOpenModal(true);
 
@@ -156,8 +166,7 @@ function Header() {
         window.klaytn.selectedAddress,
         contractAddress,
         window.klaytn.networkVersion,
-        "kaikas",
-        true
+        "kaikas"
       );
     } catch (e) {
       toast.error("로그인 실패..! 다시 시도해주세요~^^");
@@ -203,12 +212,11 @@ function Header() {
       const accounts = await ethereum.request({
         method: "eth_requestAccounts",
       });
-      // toast.success(`${accounts[0].slice(0, 13)} -> Connect 완료`);
       setIsOpenLoadingModal(false);
       setIsOpenModal(true);
       return true;
     } catch (e) {
-      // alert("connect failed");
+      toast.error("로그인 실패..! 다시 시도해주세요~^^");
       return false;
     }
   }
@@ -255,8 +263,7 @@ function Header() {
         window.ethereum.selectedAddress,
         contractAddress,
         window.ethereum.networkVersion,
-        "metamask",
-        true
+        "metamask"
       );
     } catch (e) {
       toast.error("로그인 실패..! 다시 시도해주세요~^^");
@@ -280,10 +287,19 @@ function Header() {
    * @returns
    */
   async function handleDone() {
+    // profile 모달 오픈
+    setIsOpenProfileModal(true);
+  }
+
+  /**
+   * logout
+   */
+  async function logout() {
     setUser("");
     localStorage.removeItem("_user");
     localStorage.removeItem("_wallet");
-    // TODO : 로그아웃 전 confirm 창으로 한번 더 확인
+    setIsOpenProfileModal(false);
+    toast.success("로그아웃 되었습니다");
   }
 
   /**
@@ -310,8 +326,7 @@ function Header() {
     _ownerAddress,
     _contractAddress,
     _chainId,
-    _walletType,
-    _onlyBalance
+    _walletType
   ) {
     const header = {
       headers: {
@@ -328,7 +343,6 @@ function Header() {
       contractAddress: _contractAddress,
       chainId: _chainId,
       walletType: _walletType,
-      onlyBalance: _onlyBalance,
     };
 
     await axios
@@ -337,6 +351,13 @@ function Header() {
         const data = response.data.data;
         setIsOpenLoadingModal(false);
 
+        //로그인 요청지갑과 복호화 한 지갑 확인
+        if (_ownerAddress.toUpperCase() !== data.ownerAddress.toUpperCase()) {
+          toast.error("지갑주소가 일치하지 않습니다.", {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          return;
+        }
         // 조건만족시 로그인 처리
         if (data.balance > 0) {
           toast.success(`로그인 완료 (balance : ${data.balance})`, {
@@ -345,6 +366,16 @@ function Header() {
           setUser({ account: _ownerAddress, wallet: _walletType });
           localStorage.setItem("_user", _ownerAddress);
           localStorage.setItem("_wallet", _walletType);
+
+          // 메타데이터 조회시 첫번째 NFT 이미지Url 저장
+          if (data.onlyBalance === false && data.result[0].metadata.image) {
+            setUser({
+              account: _ownerAddress,
+              wallet: _walletType,
+              imageUrl: data.result[0].metadata.image,
+            });
+            localStorage.setItem("_imageUrl", data.result[0].metadata.image);
+          }
         } else {
           toast.error(
             "해당지갑에 NFT를 보유하고 있지 않습니다. 지갑주소를 확인해주세요.",
@@ -394,10 +425,17 @@ function Header() {
     <Container>
       <WalletModal
         title="NFT 로그인"
+        walletButtons={walletButtons}
         isOpenModal={isOpenModal}
         setIsOpenModal={setIsOpenModal}
-        walletButtons={walletButtons}
       />
+      <ProfileModal
+        user={user}
+        logout={logout}
+        isOpenModal={isOpenProfileModal}
+        setIsOpenModal={setIsOpenProfileModal}
+      />
+      {/* 로딩시 보여줄 모달, 필요시 사용*/}
       <WalletModal
         title={loadingTitle}
         isLoading={true}
