@@ -12,7 +12,7 @@ import LoadingSpinner from "@components/atoms/LoadingSpinner";
 // styled components
 import styled from "styled-components";
 // modalStyle
-import modalStyles from "@styles/modal.js";
+import modalStyles from "@styles/modalStyle.js";
 
 const useStyles = makeStyles(modalStyles);
 
@@ -27,6 +27,7 @@ const WalletButton = styled.button`
   border-radius: 5px;
   box-shadow: rgb(222 227 235) 0px 1px 1px 0px;
   margin-top: 7px;
+  cursor: pointer;
   &:hover {
     background-color: #a7a7a7;
     opacity: 1;
@@ -72,7 +73,7 @@ export default function WalletModal({
         </DialogTitle>
         <DialogContent
           id="small-modal-slide-description"
-          className={classes.modalBody + " " + classes.modalSmallBody}
+          className={classes.modalBody}
         >
           {isLoading ? <LoadingSpinner /> : ""}
 

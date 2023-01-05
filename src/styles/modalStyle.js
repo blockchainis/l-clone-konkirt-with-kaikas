@@ -22,7 +22,7 @@ const modalStyle = () => ({
   },
   modalTitle: {
     fontWeight: "500",
-    fontSize:"18px",
+    fontSize: "18px",
     color: "black",
     margin: "0",
     lineHeight: "1.5",
@@ -61,9 +61,6 @@ const modalStyle = () => ({
   modalSmall: {
     width: "300px",
     margin: "auto",
-  },
-  modalSmallBody: {
-    marginTop: "20px",
   },
 });
 
